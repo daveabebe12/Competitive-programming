@@ -3,46 +3,25 @@
  * @return {number}
  */
 var findUnsortedSubarray = function(nums) {
-    let min = Infinity;
-    let max = -Infinity;
-    let flag = false;
+    let n = nums.length;
 
-    // Find the minimum element that is out of order (scanning left to right)
-    for (let i = 1; i < nums.length; i++) {
-        if (nums[i] < nums[i - 1]) {
-            flag = true;
-        }
-        if (flag) {
-            min = Math.min(min, nums[i]);
-        }
+    let start = 0;
+    let end = -1;
+
+    let min = nums[n - 1];
+    let max = nums[0];
+    
+    for(let i = 1; i < n; i++){
+        max = Math.max(max, nums[i]);
+        if(max > nums[i]) end = i;
     }
-
-    flag = false;
-    // Find the maximum element that is out of order (scanning right to left)
-    for (let i = nums.length - 2; i >= 0; i--) {
-        if (nums[i] > nums[i + 1]) {
-            flag = true;
-        }
-        if (flag) {
-            max = Math.max(max, nums[i]);
-        }
+    for(let i = n-2; i >= 0; i--){
+        min = Math.min(min, nums[i])
+        if(min < nums[i]) start = i;
     }
-
-    let l, r;
-    // Find the first index from the left where an element is greater than the 'min' out-of-order element
-    for (l = 0; l < nums.length; l++) {
-        if (min < nums[l]) {
-            break;
-        }
+    if(end === -1){
+        return 0;
+    }else{
+        return end - start + 1;
     }
-
-    // Find the first index from the right where an element is smaller than the 'max' out-of-order element
-    for (r = nums.length - 1; r >= 0; r--) {
-        if (max > nums[r]) {
-            break;
-        }
-    }
-
-    // If r - l is less than 0, it means the array was already sorted
-    return r - l < 0 ? 0 : r - l + 1;
 };
